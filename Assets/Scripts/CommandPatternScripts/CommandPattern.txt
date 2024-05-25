@@ -1,0 +1,24 @@
+What is the COMMAND Pattern
+
+- Command pattern encapsulates methods (actions or request) in objects
+- Giving us the ability to controlle the timing and playback of the methods
+
+USES: 
+	-> One common use is to add and undo option to our game
+	-> Another on is to add button remaping possibiltyes
+
+ HOW TO
+  1. Define an abstract class or interface (ICommand) that implements the Execute() and Undo() methods
+  2. Then define a CommandInvoker class that stores the made moves in a undoStack (Stack, List...)
+		1. Define the ExecuteCommand(ICommand command) method and the UndoCommand() method
+  3. Define the class and method for the Player/Thing we wanto to interact with (example: PlayerMover() class)
+  4. Insted of calling the methods directly from the PlayerMover() we create a MoveCommand : Icommand class
+		1. The MoveCommand stores any parameters it needs to execute (Set these up in the constructor)
+			1. In this example we store the PlayerMover playerMover and the movement vector
+		2. The new class requers a Execure and Undo logic methods
+			1. In Execute we call the logic from the Player (Player.move(movement))
+			2. In Undo we write the undo logic (in this case we just move the player back Player.move(-movement))
+  5. Then in the last step setup the input logic for your game/aplication
+		1. In our game the InputManager doesnt call the PlayerMover.move directly we defien a new method 
+		2. RunMoveCommand() this method creates a new MoveCommand and sends it to the CommandInvoker
+		3. Then set up you click event/input actions to call the RunMoveCommand
